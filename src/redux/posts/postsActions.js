@@ -10,7 +10,7 @@ export const newPost = (post) => {
 export const editPost = (post) => {
   return {
     type: EDIT_POST,
-    editedPost: post
+    toEditPost: post
   }
 }
 

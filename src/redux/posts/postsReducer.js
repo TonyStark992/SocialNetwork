@@ -19,7 +19,7 @@ const postsReducer = (state = initialState, action) => {
       case EDIT_POST:
         return {
           ...state,
-          posts: state.posts.map(post => post.id === action.editedPost.id ? action.editedPost : post)
+          posts: state.posts.map(post => post.id === action.toEditPost.id ? action.toEditPost : post)
         }
       case LOAD_POSTS: 
         return {

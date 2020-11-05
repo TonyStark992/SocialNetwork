@@ -8,37 +8,38 @@ import { loadPostsCount } from "redux/posts/postsActions";
 
 const Home = () => {
   const isAuthenticated = useSelector(state => state.authentification.isAuthenticated)
-  const posts = useSelector((state) => state.posts.posts);
   const postsCount = useSelector((state) => state.posts.postsCount);
   const dispatch = useDispatch();
   const token = useSelector(state => state.authentification.token);
   
+  const loadCount = () => {
+    fetch("https://my-pasteque-space.herokuapp.com/posts/count", {
+      method: "get",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      return response;
+    })
+    .then((response) => response.json())
+    .then((response) => {
+      dispatch(loadPostsCount(response));
+    })
+    .catch((error) => {
+      alert(error);
+    });
+  }
+
   useEffect(() => {
-    const loadCount = () => {
-      fetch("https://my-pasteque-space.herokuapp.com/posts/count", {
-        method: "get",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response;
-      })
-      .then((response) => response.json())
-      .then((response) => {
-        dispatch(loadPostsCount(response));
-      })
-      .catch((error) => {
-        alert(error);
-      });
-    }
     if (isAuthenticated) {
       loadCount()
     }
-  }, [token, posts, postsCount, dispatch, isAuthenticated])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated])
 
   return (
     <div>
