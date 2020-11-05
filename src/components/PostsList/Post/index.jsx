@@ -7,15 +7,18 @@ import { deletePost, editPost } from "redux/posts/postsActions";
 const Post = ({ post }) => {
   const dispatch = useDispatch();
   const [like, setLike] = useState(post.like);
+  const [alreadyLiked, setAlreadyLiked] = useState(false);
   const isAuthenticated = useSelector(state => state.authentification.isAuthenticated);
   const user = useSelector(state => state.authentification.user);
   const token = useSelector(state => state.authentification.token);
   
   const likePost = () => {
-    setLike(like + 1)
+    setLike(like + 1);
+    setAlreadyLiked(true);
   };
   const dislikePost = () => {
-    setLike(like - 1)
+    setLike(like - 1);
+    setAlreadyLiked(false);
   };
 
   const editPostLikes = () => {
@@ -90,8 +93,12 @@ const Post = ({ post }) => {
           {post.user && isAuthenticated && post.user.id === user.id &&
             <Button type="submit" onClick={() => destroyPost(post)}>Supprimer</Button>
           }
+          {!alreadyLiked &&
           <Button type="submit" variant="success" onClick={() => likePost(post)}>👍</Button>
+          }
+          {alreadyLiked &&
           <Button type="submit" variant="danger" onClick={() => dislikePost(post)}>👎</Button>
+          }
         </Card.Body>
       </Card>
   );
